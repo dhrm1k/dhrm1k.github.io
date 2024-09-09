@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>See pyscript in action</title>
+	    <link rel="stylesheet" href="styles.css">
+        <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+</head>
+<body>
+
+
+	
+	<h2><a href="./">home</a></h2>
+	
+	<b>dt: 09/09/2024</b>
+
+	<br>
+
+	<h3>See pyscript in action</h3>
+
+    The below greeting uses python's random module to greet you. Reload the page to see it in action.
+
+    <h4>
+    <script type="py">
+        from pyscript import display
+        import random
+
+        greetings = ["Hello, World!", "Hi there!", "Greetings!", "Salutations!", "Bonjour!", "Hola!"]
+        random_greeting = random.choice(greetings)
+
+        display(random_greeting)
+    </script>
+    </h4>
+
+</body>
+</html>
