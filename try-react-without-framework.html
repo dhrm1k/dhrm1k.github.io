@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Install and Try React Without a Framework</title>
+	<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+	<h1><a href="./">home</a></h2>
+	
+<b>dt: 02/01/2025</b>
+
+
+	<h2>How to Install and Try React Without a Framework</h2>
+
+  <p>
+  It can be quite bewildering to a beginner that the official <a href="https://react.dev/learn/start-a-new-react-project">React documentation</a> doesn’t provide a straightforward way to install or try React without a framework. While there is a section explaining why you should use a framework, this can be daunting for someone who is just getting started or simply wants to dabble in React.
+  </p>
+
+  <p>
+  The official docs suggest adding React to an <a href="https://react.dev/learn/add-react-to-an-existing-project#using-react-for-a-part-of-your-existing-page">existing project</a> using the following command:
+  </p>
+
+  <pre><code>npm install react react-dom</code></pre>
+
+  <p>
+    However, when you run this command, you may encounter an error due to a version conflict between React and the testing libraries, particularly <code>@testing-library/react</code>, which currently has a peer dependency on React 18.
+  </p>
+
+  <p>
+    To resolve this, you can either downgrade React or use the <code>--legacy-peer-deps</code> flag to bypass the peer dependency checks.
+  </p>
+
+  <p>
+    But how is all of this supposed to be understood by a beginner?
+  </p>
+
+  <p>
+    Here’s a simple and easy-to-follow approach for anyone who wants to install React without a framework. You can use <strong>Vite</strong>, a fast build tool, to quickly set up a React project:
+  </p>
+
+  <h2>Steps to Get Started with React Without a Framework:</h2>
+  <ol>
+    <li><strong>Create a new Vite project with the React template:</strong></li>
+  </ol>
+  <pre><code>npm create vite@latest my-react-app -- --template react</code></pre>
+
+  <ol start="2">
+    <li><strong>Navigate to your project directory:</strong></li>
+  </ol>
+  <pre><code>cd my-react-app</code></pre>
+
+  <ol start="3">
+    <li><strong>Install the necessary dependencies:</strong></li>
+  </ol>
+  <pre><code>npm install</code></pre>
+
+  <ol start="4">
+    <li><strong>Start the development server:</strong></li>
+  </ol>
+  <pre><code>npm run dev</code></pre>
+
+  <p>
+    By following these simple steps, you’ll have a React app running without any framework, thanks to Vite.
+  </p>
+</body>
+</html>
+
