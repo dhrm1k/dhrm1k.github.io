@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Understanding the Modulo Operator in Python</title>
+  <link rel="stylesheet" href="styles.css">
+
+<style>
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: rgb(18, 18, 18);
+      font-family: Arial, sans-serif;
+      color: white;
+      position: relative;
+    }
+    
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      pointer-events: none;
+    }
+
+    .content a, 
+    .content button,
+    .content input,
+    .content textarea {
+      pointer-events: auto;
+    }
+
+    pre {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+
+    code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 5px;
+      border-radius: 3px;
+    }
+
+    a {
+      color: #89CFF0;
+    }
+</style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  
+  <div class="content">
+    <h1><a href="./">home</a></h1>
+    
+    <b>dt: 14/01/2025</b>
+
+    <h2>Understanding the Modulo Operator in Python</h2>
+      
+<p>
+  The elegant and beautiful background you're seeing started with me implementing Conway's Game of Life in Pygame. Then I remembered Danny Lin's <a href="https://kdrag0n.dev/">website</a> (he's the creator of OrbStack, an alternative to Docker Desktop for managing VMs easily), where he had it featured. I decided I wanted it on my site too. After some effort, I finally got it working and made it prettier. Now, it's the background of this blog.
+</p>
+    </p>
+
+    - <p>It does look pretty.</p>
+
+    <p>
+      Do you know how the modulo operator (<code>%</code>) works in Python? I'm sure most of us think it just returns the remainder of the division, but we never really dive deeper to understand the logic behind it. Turns out, Python's implementation follows this formula:
+    </p>
+
+    <pre><code>a % b = a - b * floor(a / b)</code></pre>
+
+    <p>
+      Let's take an example to break it down. Consider <code>6 % 3</code>:
+    </p>
+
+    <pre><code>
+a = 6
+b = 3
+
+6 % 3 = 6 - 3 * floor(6 / 3)
+      = 6 - 3 * 2
+      = 6 - 6
+      = 0
+    </code></pre>
+
+    <p>
+      I got curious about this while implementing Conway's Game of Life and came across the concept of a toroidal boundary.
+    </p>
+
+    <h3>Toroidal Boundary and the Modulo Operator</h3>
+
+    <p>
+      A toroidal boundary (or periodic boundary condition) means the grid wraps around both horizontally and vertically, forming a donut-like shape. If a cell moves off one edge, it reappears on the opposite edge.
+    </p>
+
+    <p>
+      Let's say the grid width is 5, so valid column positions are 0, 1, 2, 3, and 4. Now, if we're moving left, the new column is <code>x - 1</code>. But what happens if <code>x = 0</code>? Subtracting 1 gives -1, which is outside the valid range.
+    </p>
+
+    <p>
+      To handle this, we use the modulo operator:
+    </p>
+
+    <pre><code>LEFT = (x - 1) % width</code></pre>
+
+    <p>
+      When <code>x = 0</code>, this gives:
+    </p>
+
+    <pre><code>LEFT = (0 - 1) % 5 = 4</code></pre>
+
+    <p>
+      This wraps the column around to the last position, keeping everything within the grid.
+    </p>
+
+    <h3>Modulo Behavior Across Different Languages</h3>
+
+    <p>
+      One interesting thing to note: the result of the modulo operation in Python takes the sign of the divisor (<code>b</code>). This is different from some other languages.
+    </p>
+
+    <h4>Example: -10 % 3</h4>
+
+    <p>
+      In Python:
+    </p>
+
+    <pre><code>
+-10 % 3 = -10 - 3 * floor(-10 / 3)
+        = -10 - 3 * -4
+        = -10 + 12
+        = 2
+    </code></pre>
+
+    <p>
+      But in C:
+    </p>
+
+    <pre><code>
+a % b = a - b * trunc(a / b)
+
+-10 % 3 = -10 - 3 * trunc(-10 / 3)
+        = -10 - 3 * -3
+        = -10 + 9
+        = -1
+    </code></pre>
+
+    <p>
+      Why the difference? In C, the division result is truncated towards zero (it just chops off the decimal part), while Python uses flooring. That's why the results aren't the same.
+    </p>
+
+    <p>
+      So, next time you use the modulo operator, you'll know it's more than just finding the remainder—there's a bit of math magic behind the scenes!
+    </p>
+  </div>
+
+<script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Smaller cells for more subtle effect
+    const cellSize = 8;
+    const cols = Math.floor(canvas.width / cellSize);
+    const rows = Math.floor(canvas.height / cellSize);
+    let mouseX = 0;
+    let mouseY = 0;
+
+    let grid = new Array(cols);
+    for (let i = 0; i < cols; i++) {
+      grid[i] = new Array(rows);
+      for (let j = 0; j < rows; j++) {
+        grid[i][j] = Math.random() > 0.95; // variable inital pop 5% 4
+      }
+    }
+
+    canvas.addEventListener('mousemove', (event) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+    });
+
+    function countNeighbors(grid, x, y) {
+      let sum = 0;
+      for (let i = -1; i < 2; i++) {
+        for (let j = -1; j < 2; j++) {
+          let col = (x + i + cols) % cols;
+          let row = (y + j + rows) % rows;
+          sum += grid[col][row] ? 1 : 0;
+        }
+      }
+      sum -= grid[x][y] ? 1 : 0;
+      return sum;
+    }
+
+    function update() {
+      let next = new Array(cols);
+      for (let i = 0; i < cols; i++) {
+        next[i] = new Array(rows);
+        for (let j = 0; j < rows; j++) {
+          let state = grid[i][j];
+          let neighbors = countNeighbors(grid, i, j);
+
+          if (state && (neighbors < 2 || neighbors > 3)) {
+            next[i][j] = false;
+          } else if (!state && neighbors === 3) {
+            next[i][j] = true;
+          } else {
+            next[i][j] = state;
+          }
+
+          let dx = i * cellSize - mouseX;
+          let dy = j * cellSize - mouseY;
+          let distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 10) { // variable radius
+            next[i][j] = true;
+          }
+        }
+      }
+      grid = next;
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(18, 18, 18, 0.3)'; // Darker background with slower fade
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          if (grid[i][j]) {
+            let x = i * cellSize;
+            let y = j * cellSize;
+            
+            let dx = x - mouseX;
+            let dy = y - mouseY;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            
+            // More subtle colors based on distance
+            let hue = (distance % 360);
+            let opacity = Math.max(0.15, 0.4 - distance / 400); // Fade out with distance
+            ctx.fillStyle = `hsla(${hue}, 70%, 60%, ${opacity})`;
+            
+            // Square pixels
+            ctx.fillRect(x, y, cellSize - 1, cellSize - 1);
+          }
+        }
+      }
+    }
+
+    function gameLoop() {
+      update();
+      draw();
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+</script>
+</body>
+</html>
