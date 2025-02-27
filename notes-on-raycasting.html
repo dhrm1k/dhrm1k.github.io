@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Notes on raycasting</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2><a href="./">home</a></h2>
+    <b>dt: 27/02/2024</b>
+    <br>
+    <h3>Notes on raycasting</h3>
+
+    <p>heard of john carmack? i suppose you've read *masters of doom* too. well, who doesn’t know the creator of *doom*, john carmack? that book introduced me to raycasting, and ever since, i’ve been a fan. recently, i stumbled upon this insane tutorial on implementing raycasting in c++ (<a href="https://lodev.org/cgtutor/raycasting.html">https://lodev.org/cgtutor/raycasting.html</a>). even now, i can’t fully wrap my head around how games like *wolfenstein 3d* managed to fake a 3d world inside a 2d grid. it's unreal.</p>
+
+    <p>a couple of days later, i thought—why not build a basic raycasting engine, but in javascript? now, why javascript? good question. if you’ve ever brought up javascript around me, you already know how i feel about it. hate is a mild word. so why use it? simple: everyone has a browser, and i wanted people to mess around with it without hassle.</p>
+
+    <p>i won’t go into the code here (it’s on github, or will be by the time i finish writing this). what i want to talk about is the math and physics that blew my mind while working on it. honestly, if i had realized how useful this stuff was back in high school, i’d have paid more attention.</p>
+
+    <p>a while ago, when i was playing around with an arcade-style shooter in pygame, i used the distance formula for collision detection. seems basic, but i know my 15-year-old self—who was already deep into computers—would have been blown away.</p>
+
+    <p>now, how hard could making 2.5d work be? i mean, just drawing on a 2d canvas and making it feel 3d? well, for me, it was... a task. i am not a smart man. you might want to try it for yourself.</p>
+
+
+	<p>there's a lot still to do. you can try the output at <a href="https://dhrm1k.github.io/raycast">raycast</a>. these are rough notes i take for future reference or anyone interested in raycasting or application of mathematics. i'd still recommend you to read it, i had fun writing it.</p>
+
+	
+	<p>i strongly recommend reading <a href="https://lodev.org/cgtutor/raycasting.html">Lode's Computer Graphics Tutorial</a> to get better idea of what comes here.</p>
+
+    <h2>understanding the mathematics and logic</h2>
+    <p>let’s get into the core concepts of raycasting and the math behind making a 3d scene work.</p>
+
+    <h3>player movement</h3>
+    <p>moving the player is just basic trig. imagine you’re on a grid, moving forward, backward, and rotating left or right. your position and direction can be calculated with simple math:</p>
+    <p>moving forward is just using cosine and sine on your angle: <code>newX = player.x + Math.cos(player.angle) * player.speed;</code> and <code>newY = player.y + Math.sin(player.angle) * player.speed;</code>. moving backward? same thing, just subtracted. turning is just <code>player.angle -= player.turnSpeed;</code> for left and <code>player.angle += player.turnSpeed;</code> for right.</p>
+
+    <h3>raycasting logic</h3>
+    <p>raycasting is what makes a 2d grid look 3d. the idea? fire rays in different directions and see where they hit walls. that’s it.</p>
+    
+    <h4>step-by-step explanation</h4>
+    <p>start the ray at the player’s position: <code>let rayX = player.x;</code>, <code>let rayY = player.y;</code>. get the direction: <code>const rayDirX = Math.cos(angle);</code> and <code>const rayDirY = Math.sin(angle);</code>.</p>
+    <p>then, loop forward in small steps: <code>rayX += rayDirX * stepSize;</code>, <code>rayY += rayDirY * stepSize;</code>.</p>
+    <p>check if it hit a wall: <code>const mapX = Math.floor(rayX);</code>, <code>const mapY = Math.floor(rayY);</code>. if it did, calculate the distance: <code>const distance = Math.sqrt((player.x - rayX)^2 + (player.y - rayY)^2);</code>. repeat until you hit something.</p>
+
+    <h3>rendering the scene</h3>
+    <p>once we have distances, we draw walls. first, clear the canvas: <code>ctx.fillStyle = '#000';</code>, <code>ctx.fillRect(0, 0, canvas.width, canvas.height);</code>.</p>
+    <p>set the field of view: <code>const FOV = Math.PI / 3;</code>, then cast a ray for each column of the screen. each ray’s angle: <code>const rayAngle = player.angle - FOV / 2 + (i / rayCount) * FOV;</code>. get the wall height: <code>const wallHeight = (canvas.height / distance) * 0.5;</code>, then draw it: <code>ctx.fillStyle = '#FF0000';</code>, <code>ctx.fillRect(i, (canvas.height - wallHeight) / 2, 1, wallHeight);</code>.</p>
+    <p>that’s how you fake 3d from a 2d grid.</p>
+
+	<p>i have a lot on my plate, but what's life if not fun. i am working on promocraft, but my next goal is to add textures. you may find the code on github.</p>
+
+    <h2>debugging and refining</h2>
+    <p>debugging raycasting is a pain, but here’s how to keep your sanity:</p>
+    <ol>
+        <li><b>check initialization:</b> make sure the canvas and context are working.</li>
+        <li><b>verify movement:</b> log player coordinates, make sure they update correctly.</li>
+        <li><b>debug raycasting:</b> log ray positions, check if they detect walls properly.</li>
+        <li><b>test rendering:</b> make sure wall heights actually make sense.</li>
+    </ol>
+    <p>take it step by step, debug as you go, and eventually, you’ll have a working raycasting engine.</p>
+</body>
+</html>
