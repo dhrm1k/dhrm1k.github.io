@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<link rel="alternate" type="application/rss+xml" title="RSS" href="rss.xml">
+<title>depict</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="[[index.wiki|go back]]"><h5 id="[[index.wiki|go back]]" class="header"><a href="#[[index.wiki|go back]]"><a href="index.html">go back</a></a></h5></div>
+
+<div id="depict - ai-powered visual search for www.museumsofindia.gov.in using openai's clip model"><h2 id="depict - ai-powered visual search for www.museumsofindia.gov.in using openai's clip model" class="header"><a href="#depict - ai-powered visual search for www.museumsofindia.gov.in using openai's clip model">depict - ai-powered visual search for www.museumsofindia.gov.in using openai's clip model</a></h2></div>
+
+<p>
+been sitting on this project for months, going back and forth on whether to share it.
+</p>
+
+<p>
+<a href="https://karanjanthe.me/">karan</a> janthe had this idea - what if you could search indian museum collections by just describing what you're looking for? like typing "blue sculpture" and actually finding blue sculptures, not just things tagged with those words.
+</p>
+
+<p>
+he took it upon himself to understand how <a href="https://www.museumsofindia.gov.in">museumsofindia.gov.in</a> actually works, spent time figuring out their API endpoints, and wrote the entire scraper. honestly, that was probably the hardest part of the whole project.
+</p>
+
+<p>
+we ended up building depict using CLIP (OpenAI model that "understands" both text and images). now you can search through artworks from places like the national gallery in bangalore, national museum in delhi, indian museum kolkata, etc.
+</p>
+
+<p>
+the whole thing runs on modal AI - honestly their serverless setup made deployment way easier than I expected. frontend is just React, nothing fancy.
+what's wild is how well it works. you can search for "traditional painting" and it'll surface actual traditional paintings, even if they're not labeled that way. the embeddings just... get it.
+</p>
+
+<p>
+karan deserves most of the credit for pushing this forward. i kept getting distracted by other stuff but he kept bringing it back up until we actually finished it.
+</p>
+
+<p>
+the demo no longer works since I ran out of free credits, but there's a video in the github README (and here too I suppose) showing how it worked when it was live: <a href="https://github.com/dhrm1k/depict">github.com/dhrm1k/depict</a>.
+</p>
+
+<p>
+anyone else working on making cultural stuff more searchable? Would love to hear what you're building.
+</p>
+
+<p>
+go to readme of the github project for demo of the video and more. there's also a <a href="https://www.linkedin.com/feed/update/urn:li:activity:7342488986109493248/">linkedin</a> post i made that has the video.
+</p>
+
+</body>
+</html>
